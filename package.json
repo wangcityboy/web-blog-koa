@@ -1,0 +1,35 @@
+{
+  "name": "N-blog",
+  "version": "1.0.0",
+  "description": "N-blog for koa.",
+  "main": "app.js",
+  "scripts": {
+    "start": "DEBUG=* node --harmony app"
+  },
+  "dependencies": {
+    "co": "3.1.0",
+    "gravatar": "1.1.0",
+    "koa": "0.13.0",
+    "koa-ejs": "1.1.2",
+    "koa-flash": "0.0.3",
+    "koa-logger": "1.2.2",
+    "koa-mongo": "*",
+    "koa-route": "2.1.0",
+    "koa-scheme": "0.3.5",
+    "koa-session": "2.0.0",
+    "koa-static": "1.4.7",
+    "marked": "*",
+    "moment": "2.8.3",
+    "mongodb": "1.4.15",
+    "markdown":"*",
+    "mongoose": "*",
+    "multer": "0.0.4",
+    "koa-multer":"1.0.0",
+    "koa-bodyparser":"2.2.0"
+  },
+  "devDependencies": {
+    "debug": "2.0.0"
+  },
+  "author": "云飞凌风",
+  "license": "MIT"
+}
