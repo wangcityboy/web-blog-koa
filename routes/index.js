@@ -12,10 +12,9 @@ var upath = path.resolve(__dirname+'/public/uploads/');
 var upload = multer({dest: upath});
 
 
-
-
-
 module.exports = function (app) {
+
+
 
     app.use(route.post('/uploadImg',function*(){
 
@@ -133,7 +132,6 @@ module.exports = function (app) {
 
   app.use(route.post('/post', checkLogin));
   app.use(route.post('/post',function* () {
-   //console.log("request============="+JSON.stringify(this.req.body));
     yield Post.save(this.mongo, this.session.user, this.request.body);
 
     this.flash = '发布成功!';

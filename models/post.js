@@ -5,7 +5,6 @@ var ObjectID = require('mongodb').ObjectID;
 var exception = require('../lib/exception');
 
 exports.save = function (mongo, user, data) {
-    console.log("----------------data="+JSON.stringify(data));
   var tags = {};
   data.tags.forEach(function (tag) {
     if (tag) {
@@ -52,13 +51,10 @@ exports.getFive = function (mongo, name, page) {
         if (err) {
           return cb(exception(exception.DBError, err.message));
         }
-            console.log("----------------docs="+JSON.stringify(docs));
         docs.forEach(function (doc) {
             if(doc.length == 1){
                 console.log("这一页只有一条数据");
             }
-            console.log("----------------~~doc="+JSON.stringify(doc));
-            console.log("----------------~~~~content="+JSON.stringify(doc.content));
           doc.content = marked(doc.content);
           doc.time = moment(doc.time).format('YYYY-MM-DD HH:mm');
             if(doc.comments.length == 0){
@@ -174,10 +170,6 @@ exports.getOne = function (mongo, id) {
         if (!doc) {
           return cb(exception(exception.NotFound, 'NotFound ' + id));
         }else{
-          console.log("*****",JSON.stringify(doc));
-          console.log("*****=======",doc.value.content);
-          console.log("*****====---",doc.value.comments);
-          console.log("*****====---",doc.value.comments.length);
           doc.content = marked(doc.value.content);
           doc.time = moment(doc.time).format('YYYY-MM-DD HH:mm');
           if(doc.value.comments.length == 0){
@@ -194,6 +186,9 @@ exports.getOne = function (mongo, id) {
   };
 };
 
+/*
+ * 查看帖子详情
+ */
 exports.postOne = function (mongo, id, newComment) {
   return function (cb) {
     mongo
@@ -211,6 +206,10 @@ exports.postOne = function (mongo, id, newComment) {
   };
 };
 
+
+/*
+ * 点击编辑帖子操作
+ */
 exports.getEdit = function (mongo, id, name) {
   return function (cb) {
     mongo
@@ -228,6 +227,9 @@ exports.getEdit = function (mongo, id, name) {
   };
 };
 
+/*
+ * 编辑提交帖子
+ */
 exports.postEdit = function (mongo, id, name, doc) {
   var tags = {};
     doc.tags.forEach(function (tag) {
@@ -252,6 +254,10 @@ exports.postEdit = function (mongo, id, name, doc) {
   };
 };
 
+
+/*
+ * 获取删除帖子
+ */
 exports.getDelete = function (mongo, id, name) {
   return function (cb) {
     mongo
@@ -269,6 +275,11 @@ exports.getDelete = function (mongo, id, name) {
   };
 };
 
+
+
+/*
+ * 获取评论回复
+ */
 exports.getReprint = function (mongo, id, currentUser) {
   return function (cb) {
     mongo

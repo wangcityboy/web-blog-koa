@@ -1,6 +1,6 @@
 {
   "apps" : [{
-    "name"        : "N-blog",
+    "name"        : "web-blog-koa",
     "script"      : "app.js",
     "watch"       : "true",
     "node_args"   : "--harmony",

@@ -1,7 +1,7 @@
 {
-  "name": "N-blog",
+  "name": "web-blog-koa",
   "version": "1.0.0",
-  "description": "N-blog for koa.",
+  "description": "通过koa框架来开发一个博客网站",
   "main": "app.js",
   "scripts": {
     "start": "DEBUG=* node --harmony app"
