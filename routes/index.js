@@ -11,7 +11,9 @@ var md5 = require('../lib/md5');
 module.exports = function (app) {
 
 
-
+    /*
+     * 通过kindeditor 上传图片
+     */
     app.use(route.post('/uploadImg',function*(){
 
         console.log(this.req.body);
@@ -28,7 +30,9 @@ module.exports = function (app) {
     }));
 
 
-
+/*
+ *  获取首页
+ */
   app.use(route.get('/', function* () {
     console.log("-----------------------"+JSON.stringify(app));
     var page = this.query.p ? parseInt(this.query.p) : 1;

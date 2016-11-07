@@ -7,7 +7,7 @@ var flash = require('koa-flash');
 var bodyparser = require('koa-bodyparser');
 var render = require('koa-ejs');
 var serve = require('koa-static');
-
+var multer = require('koa-multer');
 var route = require('./routes/');
 var config = require('./config.json');
 var exception = require('./lib/exception');
@@ -28,7 +28,7 @@ app.use(session());
 app.use(flash());
 app.use(mongo(config.mongo));
 app.use(serve(__dirname + '/public'));
-var multer = require('koa-multer');
+
 const upath = path.resolve(__dirname+'/public/uploads/');
 app.use(multer({ dest: upath}));
 
