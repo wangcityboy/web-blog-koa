@@ -12,7 +12,7 @@ var route = require('./routes/');
 var config = require('./config.json');
 var exception = require('./lib/exception');
 
-//var multer = require('koa-multer');
+
 var app = koa();
 app.keys = config.keys;
 
@@ -28,8 +28,9 @@ app.use(session());
 app.use(flash());
 app.use(mongo(config.mongo));
 app.use(serve(__dirname + '/public'));
-//const upath = path.resolve(__dirname+'/public/uploads/');
-//app.use(multer({ dest: upath}));
+var multer = require('koa-multer');
+const upath = path.resolve(__dirname+'/public/uploads/');
+app.use(multer({ dest: upath}));
 
 
 

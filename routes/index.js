@@ -6,10 +6,6 @@ var User = require('../models/user');
 var Post = require('../models/post');
 var exception = require('../lib/exception');
 var md5 = require('../lib/md5');
-var multer = require('koa-multer');
-var path =require('path');
-var upath = path.resolve(__dirname+'/public/uploads/');
-var upload = multer({dest: upath});
 
 
 module.exports = function (app) {
@@ -20,13 +16,14 @@ module.exports = function (app) {
 
         console.log(this.req.body);
         console.log("上传信息:%s",JSON.stringify(this.req.files));
-        console.log("上传图片:%s",JSON.stringify("./uploads/"+this.req));
+        console.log("上传图片:%s",JSON.stringify(this.req.files.imgFile.path));
 
         var imginfo ={
             "error": 0,
-            "url": "./uploads/"+this.req
+            "url": this.req.files.imgFile.name
         }
         this.body = imginfo;
+      console.log("提交信息:%s",JSON.stringify(this.body));
 
     }));
 
