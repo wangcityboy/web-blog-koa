@@ -28,7 +28,6 @@ app.use(session());
 app.use(flash());
 app.use(mongo(config.mongo));
 app.use(serve(__dirname + '/public'));
-
 const upath = path.resolve(__dirname+'/public/uploads/');
 app.use(multer({ dest: upath}));
 

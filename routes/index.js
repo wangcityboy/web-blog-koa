@@ -12,7 +12,7 @@ module.exports = function (app) {
 
 
     /*
-     * 通过kindeditor 上传图片
+     *  通过kindeditor 编辑器 上传图片
      */
     app.use(route.post('/uploadImg',function*(){
 
@@ -30,11 +30,10 @@ module.exports = function (app) {
     }));
 
 
-/*
- *  获取首页
- */
+  /*
+   *  打开首页页面,get方法
+   */
   app.use(route.get('/', function* () {
-    console.log("-----------------------"+JSON.stringify(app));
     var page = this.query.p ? parseInt(this.query.p) : 1;
     var posts = yield Post.getFive(this.mongo, null, page);
     var total = yield Post.count(this.mongo);
@@ -50,6 +49,10 @@ module.exports = function (app) {
     });
   }));
 
+
+  /*
+   * 打开注册页面, 当前需要处于未登录状态, get请求
+   */
   app.use(route.get('/reg', checkNotLogin));
   app.use(route.get('/reg', function* () {
     yield this.render('reg', {
@@ -59,6 +62,9 @@ module.exports = function (app) {
     });
   }));
 
+  /*
+   * 提交注册资料,post请求
+   */
   app.use(route.post('/reg', checkNotLogin));
   app.use(route.post('/reg', function* () {
     var body = this.request.body;
@@ -92,15 +98,22 @@ module.exports = function (app) {
   }));
 
 
+  /*
+   * 打开登录页面, 当前需要处于未登录状态, get请求
+   */
   app.use(route.get('/login', checkNotLogin));
   app.use(route.get('/login', function* () {
     yield this.render('login', {
-      title: '注册',
+      title: '登录',
       user: this.session.user,
       flash: this.flash
     });
   }));
 
+
+  /*
+   * 提交登录按钮,进行用户登录,当前需要处于未登录状态, post请求
+   */
   app.use(route.post('/login', checkNotLogin));
   app.use(route.post('/login', function* () {
     var name = this.request.body.name;
@@ -122,6 +135,10 @@ module.exports = function (app) {
     this.redirect('/');
   }));
 
+
+  /*
+   *  打开发表帖子页面,当前需要处于登录状态, get请求
+   */
   app.use(route.get('/post', checkLogin));
   app.use(route.get('/post', function* () {
     yield this.render('post', {
@@ -131,6 +148,9 @@ module.exports = function (app) {
     });
   }));
 
+  /*
+   * 提交方法帖子按钮,当前需要处于登录状态, post请求
+   */
   app.use(route.post('/post', checkLogin));
   app.use(route.post('/post',function* () {
     yield Post.save(this.mongo, this.session.user, this.request.body);
@@ -139,6 +159,10 @@ module.exports = function (app) {
     this.redirect('/');
   }));
 
+
+  /*
+   * 打开注销登录页面,当前需要处于登录状态, get请求
+   */
   app.use(route.get('/logout', checkLogin));
   app.use(route.get('/logout', function* () {
     this.session.user = null;
@@ -146,6 +170,11 @@ module.exports = function (app) {
     this.redirect('/');
   }));
 
+
+
+  /*
+   * 打开存档页面,不用验证用户是否已登录,get请求
+   */
   app.use(route.get('/archive', function* () {
     var posts = yield Post.getArchive(this.mongo);
 
@@ -157,6 +186,10 @@ module.exports = function (app) {
     });
   }));
 
+
+  /*
+   * 打开标签页面,不用验证用户是否已登录,get请求
+   */
   app.use(route.get('/tags', function* () {
     var posts = yield Post.getTags(this.mongo);
 
@@ -168,6 +201,10 @@ module.exports = function (app) {
     });
   }));
 
+
+  /*
+   * 在标签页面中点击标签,打开标签详情页面,不用验证用户是否已登录,get请求
+   */
   app.use(route.get('/tags/:tag', function* (tag) {
     var posts = yield Post.getTag(this.mongo, tag);
 
@@ -179,6 +216,9 @@ module.exports = function (app) {
     });
   }));
 
+  /*
+   * 打开友情链接页面,不用验证用户是否已登录,get请求
+   */
   app.use(route.get('/links', function* () {
     yield this.render('links', {
       title: '友情链接',
@@ -187,6 +227,10 @@ module.exports = function (app) {
     });
   }));
 
+
+  /*
+   * 打开搜索页面,不用验证用户是否已登录,get请求
+   */
   app.use(route.get('/search', function* () {
     var keyword = this.query.keyword;
     var posts = yield Post.search(this.mongo, keyword);
@@ -199,6 +243,9 @@ module.exports = function (app) {
     });
   }));
 
+  /*
+   * 点击用户名称,打开用户帖子列表,不用验证用户是否已登录,get请求
+   */
   app.use(route.get('/u/:name', function* (name) {
     var page = this.query.p ? parseInt(this.query.p) : 1;
     var posts = yield Post.getFive(this.mongo, name, page);
@@ -210,14 +257,17 @@ module.exports = function (app) {
       page: page,
       user: this.session.user,
       isFirstPage: (page - 1) == 0,
-      isLastPage: ((page - 1) * 10 + posts.length) == total,
+      isLastPage: ((page - 1) * 5 + posts.length) == total,
       flash: this.flash
     });
   }));
 
+
+   /*
+    * 打开帖子详情页,不用验证用户是否已登录,get 请求
+    */
   app.use(route.get('/p/:id', function* (id) {
     var post = yield Post.getOne(this.mongo, id);
-    console.log("post=-----------------------------"+JSON.stringify(post));
       if (!this.session.user) {
           console.log("-----当前用户没有登录-----");
       }
@@ -229,6 +279,9 @@ module.exports = function (app) {
     });
   }));
 
+  /*
+   * 用户进行帖子留言,需要验证用户登录,post请求
+   */
   app.use(route.post('/p/:id', checkLogin));
   app.use(route.post('/p/:id', function* (id) {
     var body = this.request.body;
@@ -247,6 +300,10 @@ module.exports = function (app) {
     this.redirect('back');
   }));
 
+
+  /*
+   * 用户点击自己的帖子的编辑按钮,打开编辑页面,get请求
+   */
   app.use(route.get('/edit/:id/', checkLogin));
   app.use(route.get('/edit/:id/', function* (id, next) {
     var currentUser = this.session.user;
@@ -260,6 +317,9 @@ module.exports = function (app) {
     });
   }));
 
+  /*
+   *  用户完成帖子编辑并点击提交编辑后,跳转到帖子详情页,post请求
+   */
   app.use(route.post('/edit/:id', checkLogin));
   app.use(route.post('/edit/:id', function* (id) {
     var currentUser = this.session.user;
@@ -269,6 +329,9 @@ module.exports = function (app) {
     this.redirect('/p/' + id);
   }));
 
+  /*
+   * 点击删除帖子,用户只能删除自己的帖子
+   */
   app.use(route.get('/delete/:id', checkLogin));
   app.use(route.get('/delete/:id', function* (id) {
     var currentUser = this.session.user;
@@ -278,6 +341,9 @@ module.exports = function (app) {
     this.redirect('/');
   }));
 
+  /*
+   * 点击转载帖子,用户只能转载别人的帖子
+   */
   app.use(route.get('/reprint/:id', checkLogin));
   app.use(route.get('/reprint/:id', function* (id) {
     var currentUser = this.session.user;
@@ -291,6 +357,8 @@ module.exports = function (app) {
     yield this.render('404');
   });
 };
+
+
 
 function* checkLogin () {
   if (!this.session.user) {

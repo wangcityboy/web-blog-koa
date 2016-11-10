@@ -4,6 +4,9 @@ var gravatar = require('gravatar');
 var ObjectID = require('mongodb').ObjectID;
 var exception = require('../lib/exception');
 
+/*
+ * 用户发布帖子后调用的保存数据到数据库
+ */
 exports.save = function (mongo, user, data) {
   var tags = {};
   data.tags.forEach(function (tag) {
@@ -34,6 +37,9 @@ exports.save = function (mongo, user, data) {
   };
 };
 
+/*
+ * 获取最新的五篇帖子
+ */
 exports.getFive = function (mongo, name, page) {
   var query = {};
   if (name) {
@@ -53,12 +59,12 @@ exports.getFive = function (mongo, name, page) {
         }
         docs.forEach(function (doc) {
             if(doc.length == 1){
-                console.log("这一页只有一条数据");
+                console.log("当前只有一条数据");
             }
           doc.content = marked(doc.content);
           doc.time = moment(doc.time).format('YYYY-MM-DD HH:mm');
             if(doc.comments.length == 0){
-                console.log("======没有评论数据=======");
+                console.log("没有评论数据");
             }else{
                 doc.comments.forEach(function (comment) {
                     comment.time = moment(comment.time).format('YYYY-MM-DD HH:mm');
@@ -70,6 +76,9 @@ exports.getFive = function (mongo, name, page) {
   };
 };
 
+/*
+ * 获取帖子数量,用来做分页处理,每页显示五篇帖子
+ */
 exports.count = function (mongo, name) {
   var query = {};
   if (name) {
@@ -88,6 +97,9 @@ exports.count = function (mongo, name) {
   };
 };
 
+/*
+ * 获取存档列表
+ */
 exports.getArchive = function (mongo) {
   return function (cb) {
     mongo
@@ -107,6 +119,9 @@ exports.getArchive = function (mongo) {
   };
 };
 
+/*
+ * 获取标签列表
+ */
 exports.getTags = function (mongo) {
   return function (cb) {
     mongo
@@ -121,6 +136,9 @@ exports.getTags = function (mongo) {
   };
 };
 
+/*
+ * 根据标签获取帖子列表
+ */
 exports.getTag = function (mongo, tag) {
   return function (cb) {
     mongo
@@ -139,6 +157,9 @@ exports.getTag = function (mongo, tag) {
   };
 };
 
+/*
+ * 搜索帖子调用的
+ */
 exports.search = function (mongo, keyword) {
   var pattern = new RegExp(keyword, "i");
   return function (cb) {
@@ -158,6 +179,9 @@ exports.search = function (mongo, keyword) {
   };
 };
 
+/*
+ * 根据帖子ID号,获取该篇帖子数据
+ */
 exports.getOne = function (mongo, id) {
   return function (cb) {
     mongo

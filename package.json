@@ -1,7 +1,7 @@
 {
   "name": "web-blog-koa",
   "version": "1.0.0",
-  "description": "通过koa框架来开发一个博客网站",
+  "description": "使用koa框架来开发一个博客网站",
   "main": "app.js",
   "scripts": {
     "start": "DEBUG=* node --harmony app"

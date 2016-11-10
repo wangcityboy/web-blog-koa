@@ -1,5 +1,8 @@
 var exception = require('../lib/exception');
 
+/*
+ * 用户注册调用的接口
+ */
 exports.save = function (mongo, doc) {
   return function (cb) {
     mongo
@@ -14,6 +17,9 @@ exports.save = function (mongo, doc) {
   };
 };
 
+/*
+ * 用户登录调用的接口
+ */
 exports.get = function (mongo, name) {
   return function (cb) {
     mongo
